@@ -93,6 +93,8 @@ public class EnemyShip : MonoBehaviour
     
     private void Start()
     {
+        this.GetComponent<Animator>().enabled = false;
+
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         if (verticalMove == true)
             destination = 1;
@@ -104,11 +106,17 @@ public class EnemyShip : MonoBehaviour
             destination = Random.Range(0.5f, 2.3f);
         
     }
-
+    private GameObject[] deathParticals;
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Bullet" && isInvincible == false)
         {
+            deathParticals = GameObject.FindGameObjectsWithTag("DeathParticals");
+            foreach (var item in deathParticals)
+            {
+                item.transform.position = transform.position;
+                item.GetComponent<ParticleSystem>().Play();
+            }
             Destroy(this.gameObject);
         }
     }

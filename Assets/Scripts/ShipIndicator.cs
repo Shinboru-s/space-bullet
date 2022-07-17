@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ShipIndicator : MonoBehaviour
-{   public float rotationSpeed;
+{   
+    //public float rotationSpeed;
+    //public float setRotationReverseTime;
+    //private float rotationReverseTime;
 
     public Transform firePoint;
     public Transform testPoint;
@@ -13,31 +16,36 @@ public class ShipIndicator : MonoBehaviour
 
     void Start()
     {
-        
+        //rotationReverseTime = setRotationReverseTime / 2;
     }
     private bool canShoot = true;
-    public int ammo = 5;
+    public int ammo;
     void Update()
     {
-        if (ammo == 0)
+        if (ammo == 0 && canShoot == true)
         {
             canShoot = false;
             GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyShip>().DestroyPlayer();
         }
-            
 
-        if (transform.eulerAngles.z >= 170 || transform.eulerAngles.z <= 10)
-            rotationSpeed *= -1f;
 
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z + rotationSpeed * Time.deltaTime);
+        //if (rotationReverseTime <= 0)
+        //{
+        //    rotationSpeed *= -1f;
+        //    rotationReverseTime = setRotationReverseTime;
+        //}
+        //else
+        //    rotationReverseTime -= Time.deltaTime;
+
+        //transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z + rotationSpeed * Time.deltaTime);
 
         if (Input.GetButtonDown("Fire1") && canShoot == true) {
 
-            Quaternion rot = Quaternion.Euler(0, 0, transform.eulerAngles.z - 90);
+            Quaternion rot = Quaternion.Euler(0, 0, transform.eulerAngles.z);
             GameObject bullet = Instantiate(bulletPrefab, firePoint.position, rot);
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-            bullet.name = (transform.eulerAngles.z - 90).ToString();
-            rb.AddForce(testPoint.right * bulletForce, ForceMode2D.Impulse);
+            bullet.name = (transform.eulerAngles.z).ToString();
+            rb.AddForce(testPoint.up * bulletForce, ForceMode2D.Impulse);
             Destroy(bullet, 3f);
 
             ammo -= 1;

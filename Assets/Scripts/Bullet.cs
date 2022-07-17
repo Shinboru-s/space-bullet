@@ -18,6 +18,22 @@ public class Bullet : MonoBehaviour
 
     }
 
+    private float timeBtwSpawns;
+    public float setTimeBtwSpawns;
+    public GameObject trail;
+
+    private void Update()
+    {
+        if (timeBtwSpawns <= 0)
+        {
+            GameObject trailObject = Instantiate(trail, transform.position, Quaternion.identity);
+            timeBtwSpawns = setTimeBtwSpawns;
+            Destroy(trailObject, 0.5f);
+        }
+        else
+            timeBtwSpawns -= Time.deltaTime;
+    }
+
     private float degree;
 
     private void OnCollisionEnter2D(Collision2D collision)
