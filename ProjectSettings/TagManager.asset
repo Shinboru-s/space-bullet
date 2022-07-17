@@ -9,6 +9,7 @@ TagManager:
   - Wall
   - Indicator
   - DeathParticals
+  - EnemySpawner
   layers:
   - Default
   - TransparentFX

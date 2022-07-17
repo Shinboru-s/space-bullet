@@ -117,6 +117,7 @@ public class EnemyShip : MonoBehaviour
                 item.transform.position = transform.position;
                 item.GetComponent<ParticleSystem>().Play();
             }
+            GameObject.FindGameObjectWithTag("EnemySpawner").GetComponent<EnemySpawner>().EnemySpawnerMethod();
             Destroy(this.gameObject);
         }
     }
