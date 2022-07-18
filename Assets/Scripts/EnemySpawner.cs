@@ -9,11 +9,6 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
         EnemyShips = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (var child in EnemyShips)
-        {
-            Debug.Log(child.name);
-
-        }
         ShipCount = EnemyShips.Length;
 
         EnemySpawnerMethod();

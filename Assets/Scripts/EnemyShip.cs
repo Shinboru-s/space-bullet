@@ -88,6 +88,11 @@ public class EnemyShip : MonoBehaviour
                 invincibleTimer -= Time.deltaTime;
             }
         }
+
+        if (GameObject.FindGameObjectWithTag("Indicator").GetComponent<ShipIndicator>().ammo == 0)
+        {
+            DestroyPlayer();
+        }
     }
 
     
@@ -128,6 +133,6 @@ public class EnemyShip : MonoBehaviour
         verticalMove = false;
         horizontalMove = false;
         playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
-        transform.position = Vector2.MoveTowards(transform.position, playerPosition, destroySpeed * Time.deltaTime);
+        this.transform.position = Vector2.MoveTowards(this.transform.position, playerPosition, destroySpeed * Time.deltaTime);
     }
 }

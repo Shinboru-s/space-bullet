@@ -5,14 +5,12 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     private Rigidbody2D rb;
-    public SpriteRenderer spriteRenderer;
-    public Sprite[] bulletSprites;
+
     private float bulletForce;
     private int bounceCount = 2;
 
     private void Start()
     {
-        spriteRenderer.sprite = bulletSprites[Random.Range(0, bulletSprites.Length)];
         rb = GetComponent<Rigidbody2D>();
         bulletForce = GameObject.FindGameObjectWithTag("Indicator").GetComponent<ShipIndicator>().bulletForce;
 
