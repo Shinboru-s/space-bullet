@@ -53,7 +53,7 @@ public class ShipIndicator : MonoBehaviour
     {
         if (canShoot == true)
         {
-
+            FindObjectOfType<AudioManager>().Play("Shoot");
             Quaternion rot = Quaternion.Euler(0, 0, transform.eulerAngles.z);
             GameObject bullet = Instantiate(bulletPrefab, firePoint.position, rot);
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();

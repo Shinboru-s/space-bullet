@@ -51,4 +51,14 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public void ButtonSelected(GameObject button)
+    {
+        button.GetComponent<Animator>().SetTrigger("Selected");
+    }
 }

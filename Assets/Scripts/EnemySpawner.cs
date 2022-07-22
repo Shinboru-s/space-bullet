@@ -24,7 +24,7 @@ public class EnemySpawner : MonoBehaviour
     {
         if(ShipCount > counter)
         {
-            EnemyShips[counter].gameObject.GetComponent<Animator>().enabled = true;
+            EnemyShips[counter].transform.parent.gameObject.GetComponent<Animator>().enabled = true;
             counter++;
         }
         else

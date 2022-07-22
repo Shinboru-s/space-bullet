@@ -35,6 +35,8 @@ public class EnemyShip : MonoBehaviour
     private float cooldownTimer;
     private SpriteRenderer spriteRenderer;
 
+
+
     void Update()
     {
         if (horizontalMove == true)
@@ -89,7 +91,8 @@ public class EnemyShip : MonoBehaviour
             }
         }
 
-        if (GameObject.FindGameObjectWithTag("Indicator").GetComponent<ShipIndicator>().ammo == 0)
+        
+        if (GameObject.FindGameObjectWithTag("Indicator").GetComponent<ShipIndicator>().ammo == 0&& GameObject.FindGameObjectWithTag("Bullet") == null)
         {
             DestroyPlayer();
         }
@@ -98,7 +101,7 @@ public class EnemyShip : MonoBehaviour
     
     private void Start()
     {
-        this.GetComponent<Animator>().enabled = false;
+        transform.parent.GetComponent<Animator>().enabled = false;
 
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         if (verticalMove == true)
@@ -109,14 +112,20 @@ public class EnemyShip : MonoBehaviour
 
         if (randomMove == true)
             destination = Random.Range(0.5f, 2.3f);
+
+        cameraShake = GameObject.FindGameObjectWithTag("ScreenShake").GetComponent<CameraShake>();
         
     }
+    private CameraShake cameraShake;
     private GameObject[] deathParticals;
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Bullet" && isInvincible == false)
         {
+            FindObjectOfType<AudioManager>().Play("Destroy");
             deathParticals = GameObject.FindGameObjectsWithTag("DeathParticals");
+            cameraShake.CamShake();
+            //StartCoroutine(cameraShake.Shake(0.15f, 0.4f));
             foreach (var item in deathParticals)
             {
                 item.transform.position = transform.position;
@@ -125,11 +134,19 @@ public class EnemyShip : MonoBehaviour
             GameObject.FindGameObjectWithTag("EnemySpawner").GetComponent<EnemySpawner>().EnemySpawnerMethod();
             Destroy(this.gameObject);
         }
+        else if(collision.gameObject.tag == "Bullet" && isInvincible == true)
+            FindObjectOfType<AudioManager>().Play("Bounce");
     }
 
     
     public void DestroyPlayer()
     {
+        if (shield == true)
+        {
+            shieldObject.gameObject.SetActive(false);
+
+        }
+
         verticalMove = false;
         horizontalMove = false;
         playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
