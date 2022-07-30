@@ -18,6 +18,7 @@ public class EnemyShip : MonoBehaviour
     public bool verticalMove = false;
     private Vector2 playerPosition;
     public float verticalSpeed = 1f;
+    private GameObject player;
 
     [Header("Shield")]
     public bool shield = false;
@@ -35,7 +36,20 @@ public class EnemyShip : MonoBehaviour
     private float cooldownTimer;
     private SpriteRenderer spriteRenderer;
 
+    [Header("Shooter")]
+    public bool shooter = false;
+    public GameObject bulletPrefab;
+    public Transform firePoint;
+    public float bulletForce;
+    private float shootTimer = 0.5f;
 
+    private Transform target;
+    private Vector3 targetPos;
+    private Vector3 thisPos;
+    private float angle;
+    public float offset;
+
+    
 
     void Update()
     {
@@ -57,7 +71,12 @@ public class EnemyShip : MonoBehaviour
 
         if (verticalMove == true)
         {
-            playerPosition= new Vector2(transform.position.x, GameObject.FindGameObjectWithTag("Player").transform.position.y);
+            player = GameObject.FindGameObjectWithTag("Player");
+            if (Mathf.Abs(player.transform.position.y - transform.position.y) > 2)
+                playerPosition = new Vector2(transform.position.x, player.transform.position.y);
+            else
+                playerPosition = player.transform.position;
+
             transform.position = Vector2.MoveTowards(transform.position, playerPosition, verticalSpeed * Time.deltaTime);
 
             
@@ -81,7 +100,7 @@ public class EnemyShip : MonoBehaviour
                 isInvincible = true;
                 if(invincibleTimer <= 0)
                 {
-                    setCooldownTimer = Random.Range(2.0f, 5.0f);
+                    setCooldownTimer = Random.Range(1.0f, 3.0f);
                     invincibleTimer = setInvincibleTimer;
                     cooldownTimer = setCooldownTimer;
                     isInvincible = false;
@@ -91,16 +110,50 @@ public class EnemyShip : MonoBehaviour
             }
         }
 
-        
-        if (GameObject.FindGameObjectWithTag("Indicator").GetComponent<ShipIndicator>().ammo == 0&& GameObject.FindGameObjectWithTag("Bullet") == null)
+        if (shooter == true)
         {
+            targetPos = target.position;
+            thisPos = transform.position;
+            targetPos.x = targetPos.x - thisPos.x;
+            targetPos.y = targetPos.y - thisPos.y;
+            angle = Mathf.Atan2(targetPos.y, targetPos.x) * Mathf.Rad2Deg;
+            firePoint.rotation = Quaternion.Euler(new Vector3(0, 0, angle + offset));
+
+            if (shootTimer > 0)
+            {
+                shootTimer -= Time.deltaTime;
+            }
+            else if (shootTimer <= 0)
+            {
+                shootTimer = Random.Range(2.0f, 4.0f);
+                //FindObjectOfType<AudioManager>().Play("Shoot");
+                Quaternion rot = Quaternion.Euler(0, 0, firePoint.eulerAngles.z);
+                GameObject bullet = Instantiate(bulletPrefab, firePoint.position, rot);
+                Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+                bullet.name = (transform.eulerAngles.z).ToString();
+                rb.AddForce(firePoint.up * bulletForce, ForceMode2D.Impulse);
+                Destroy(bullet, 3f);
+                //AmmoUI[ammo - 1].SetActive(false);
+                //ammo -= 1;
+            }
+        }
+
+
+        if (GameObject.FindGameObjectWithTag("Indicator").GetComponent<ShipIndicator>().ammo == 0 && GameObject.FindGameObjectWithTag("Bullet") == null )
+        {
+            //verticalMove = false;
+            //canDestroyPlayer = false;
+            //invincible = false;
+            //shooter = false;
             DestroyPlayer();
         }
     }
-
+    
     
     private void Start()
     {
+        
+        target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         transform.parent.GetComponent<Animator>().enabled = false;
 
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
@@ -112,6 +165,8 @@ public class EnemyShip : MonoBehaviour
 
         if (randomMove == true)
             destination = Random.Range(0.5f, 2.3f);
+        if (invincible == true)
+            invincibleTimer = setInvincibleTimer;
 
         cameraShake = GameObject.FindGameObjectWithTag("ScreenShake").GetComponent<CameraShake>();
         

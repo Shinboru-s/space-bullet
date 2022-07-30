@@ -6,6 +6,7 @@ public class EnemySpawner : MonoBehaviour
 {
     private GameObject[] EnemyShips;
     private int ShipCount = 0;
+ 
     void Start()
     {
         EnemyShips = GameObject.FindGameObjectsWithTag("Enemy");
@@ -22,14 +23,18 @@ public class EnemySpawner : MonoBehaviour
     private int counter = 0;
     public void EnemySpawnerMethod()
     {
-        if(ShipCount > counter)
+        if (ShipCount > counter && GameObject.FindGameObjectWithTag("Player") != null)
         {
             EnemyShips[counter].transform.parent.gameObject.GetComponent<Animator>().enabled = true;
             counter++;
         }
         else
-            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>().backgroundColor = Color.green;
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponentInParent<Animator>().SetTrigger("levelEnded");
 
-        
+        }
+            
+
+
     }
 }

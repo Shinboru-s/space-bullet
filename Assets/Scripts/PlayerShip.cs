@@ -14,14 +14,16 @@ public class PlayerShip : MonoBehaviour
     void Update()
     {
         
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy"|| collision.gameObject.tag == "EnemyBullet")
         {
-            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>().backgroundColor=Color.red;
-            Time.timeScale = 0;
+            GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().GameOverScreen();
+            
         }
+
     }
 }

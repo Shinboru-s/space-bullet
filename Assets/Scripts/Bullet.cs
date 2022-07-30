@@ -19,17 +19,22 @@ public class Bullet : MonoBehaviour
     private float timeBtwSpawns;
     public float setTimeBtwSpawns;
     public GameObject trail;
+    public bool enemyBullet;
 
     private void Update()
     {
-        if (timeBtwSpawns <= 0)
+        if (enemyBullet == false)
         {
-            GameObject trailObject = Instantiate(trail, transform.position, Quaternion.identity);
-            timeBtwSpawns = setTimeBtwSpawns;
-            Destroy(trailObject, 0.5f);
+            if (timeBtwSpawns <= 0)
+            {
+                GameObject trailObject = Instantiate(trail, transform.position, Quaternion.identity);
+                timeBtwSpawns = setTimeBtwSpawns;
+                Destroy(trailObject, 0.5f);
+            }
+            else
+                timeBtwSpawns -= Time.deltaTime;
         }
-        else
-            timeBtwSpawns -= Time.deltaTime;
+        
     }
 
     private float degree;
@@ -54,7 +59,10 @@ public class Bullet : MonoBehaviour
         else
             Destroy(this.gameObject);
 
+        if(collision.gameObject.tag=="NotBounce")
+            FindObjectOfType<AudioManager>().Play("Bounce");
 
-        
+
+
     }
 }

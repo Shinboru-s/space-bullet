@@ -11,6 +11,14 @@ TagManager:
   - DeathParticals
   - EnemySpawner
   - ScreenShake
+  - SliderMusic
+  - SliderSFX
+  - PlayerHolder
+  - GameManager
+  - EnemyBullet
+  - NotBounce
+  - SaveSystem
+  - LevelButton
   layers:
   - Default
   - TransparentFX
@@ -20,7 +28,7 @@ TagManager:
   - UI
   - Player
   - Bullet
-  - 
+  - EnemyBullet
   - 
   - 
   - 
