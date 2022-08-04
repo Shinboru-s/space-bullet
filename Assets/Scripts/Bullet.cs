@@ -11,6 +11,7 @@ public class Bullet : MonoBehaviour
 
     private void Start()
     {
+
         rb = GetComponent<Rigidbody2D>();
         bulletForce = GameObject.FindGameObjectWithTag("Indicator").GetComponent<ShipIndicator>().bulletForce;
 
@@ -45,8 +46,11 @@ public class Bullet : MonoBehaviour
             Destroy(this.gameObject);
 
 
+            
+
         if (collision.gameObject.tag == "Wall")
         {
+
             rb.velocity = Vector2.zero;
             degree = float.Parse(this.gameObject.name);
             degree += degree;
@@ -56,11 +60,15 @@ public class Bullet : MonoBehaviour
             bounceCount--;
             FindObjectOfType<AudioManager>().Play("Bounce");
         }
+
+        else if (collision.gameObject.tag == "NotBounce")
+        {
+            FindObjectOfType<AudioManager>().Play("Bounce");
+            Destroy(this.gameObject);
+        }
+
         else
             Destroy(this.gameObject);
-
-        if(collision.gameObject.tag=="NotBounce")
-            FindObjectOfType<AudioManager>().Play("Bounce");
 
 
 

@@ -28,9 +28,10 @@ public class EnemySpawner : MonoBehaviour
             EnemyShips[counter].transform.parent.gameObject.GetComponent<Animator>().enabled = true;
             counter++;
         }
-        else
+        else if(GameObject.FindGameObjectWithTag("Player") != null)
         {
             GameObject.FindGameObjectWithTag("Player").GetComponentInParent<Animator>().SetTrigger("levelEnded");
+            GameObject.FindGameObjectWithTag("Player").GetComponentInParent<PlayerShip>().isGameEnd = true;
 
         }
             

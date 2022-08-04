@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject gameOver;
     private bool isGameOver = false;
+
+    public bool isTutorial;
     void Start()
     {
         isGameOver = false;
@@ -45,7 +47,7 @@ public class GameManager : MonoBehaviour
             isGameStarted = true;
         }
 
-        if (isGameStarted == true && isGameOver == false)
+        if (isGameStarted == true && isGameOver == false && isTutorial == false)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
                 PauseGame();
@@ -72,10 +74,18 @@ public class GameManager : MonoBehaviour
         {
             item.SetActive(true);
         }
+
+        if (isTutorial == true)
+        {
+            GameObject.FindGameObjectWithTag("TutorialManagerTag").GetComponent<TutorialManager>().NextText();
+            shootArea.SetActive(false);
+        }
+            
     }
 
     public void PauseGame()
     {
+        ButtonClickedSound();
         if (isPaused == false)
         {
             pauseObjects.SetActive(true);
@@ -94,17 +104,20 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
+        ButtonClickedSound();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void MainMenu()
     {
+        ButtonClickedSound();
         SceneManager.LoadScene("MainMenu");
     }
 
     public void ButtonSelected(GameObject button)
     {
         button.GetComponent<Animator>().SetTrigger("Selected");
+        FindObjectOfType<AudioManager>().Play("Button");
     }
 
     public void NextLevel()
@@ -135,10 +148,15 @@ public class GameManager : MonoBehaviour
 
         foreach (GameObject item in EnemyShips)
         {
-            Debug.Log(item.name);
+
             item.GetComponent<EnemyShip>().enabled = false;
         }
         //Time.timeScale = 0;
 
+    }
+
+    private void ButtonClickedSound()
+    {
+        FindObjectOfType<AudioManager>().Play("ButtonClick");
     }
 }

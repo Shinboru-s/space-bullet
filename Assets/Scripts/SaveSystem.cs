@@ -48,9 +48,7 @@ public class SaveSystem : MonoBehaviour
 
 
         SaveObjects loadedSaveObjects = JsonUtility.FromJson<SaveObjects>(json);
-        Debug.Log(loadedSaveObjects.currentLevel);
-        Debug.Log(loadedSaveObjects.musicVolume);
-        Debug.Log(loadedSaveObjects.sfxVolume);
+
     }
 
     

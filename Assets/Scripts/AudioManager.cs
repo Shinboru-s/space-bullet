@@ -12,21 +12,39 @@ public class Sound
     public string name;
     public AudioClip clip;
 
-    [Range(0f,1f)]
+    [Range(0f, 1f)]
     public float volume;
 
-    [Range(.1f,3f)]
+    [Range(.1f, 3f)]
     public float pitch;
+
+    public bool loop;
 
     [HideInInspector]
     public AudioSource source;
+
+
 }
+
+
 public class AudioManager : MonoBehaviour
 {
     public Sound[] sounds;
+
+    public static AudioManager instance;
     void Awake()
     {
+        if (instance == null)
+            instance = this;
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+        DontDestroyOnLoad(gameObject);
+
         Load();
+        Play("Theme");
     }
 
     public void Play(string name)
@@ -46,24 +64,19 @@ public class AudioManager : MonoBehaviour
             {
                 item.source = gameObject.AddComponent<AudioSource>();
                 item.source.clip = item.clip;
-                item.source.volume = loadedSaveObjects.sfxVolume;
                 item.source.pitch = item.pitch;
+                item.source.loop = item.loop;
+
+                if (item.name == "Theme")
+                    item.source.volume = loadedSaveObjects.musicVolume;
+                else
+                    item.source.volume = loadedSaveObjects.sfxVolume;
             }
             //GameObject.FindGameObjectWithTag("SliderMusic").GetComponent<Slider>().value = loadedSaveObjects.musicVolume;
             // GameObject.FindGameObjectWithTag("SliderSFX").GetComponent<Slider>().value = loadedSaveObjects.sfxVolume;
         }
         else            //save dosyasi bulunmadiginda butun degerlerin 1 oldugu bir dosya olusturulur
         {
-            SaveObjects saveObjects = new SaveObjects
-            {
-                musicVolume = 1,
-                sfxVolume = 1,
-                currentLevel = 1
-            };
-            string json = JsonUtility.ToJson(saveObjects);
-
-            File.WriteAllText(Application.dataPath + "/save.txt", json);
-
             foreach (Sound item in sounds)
             {
                 item.source = gameObject.AddComponent<AudioSource>();
@@ -72,6 +85,30 @@ public class AudioManager : MonoBehaviour
                 item.source.pitch = item.pitch;
             }
         }
+    }
+
+    private AudioSource[] audios;
+
+    public void ValueUpdate()
+    {
+        audios = gameObject.GetComponents<AudioSource>();
+
+        for (int i = 0; i < audios.Length; i++)
+        {
+            if (audios[i].clip.name == "MainTheme")
+                audios[i].volume = GameObject.FindGameObjectWithTag("SliderMusic").GetComponent<Slider>().value;
+
+
+            else
+                audios[i].volume = GameObject.FindGameObjectWithTag("SliderSFX").GetComponent<Slider>().value;
+
+
+
+
+        }
+
+
+
     }
 
     private class SaveObjects

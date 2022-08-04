@@ -17,9 +17,10 @@ public class PlayerShip : MonoBehaviour
         
     }
 
+    public bool isGameEnd = false;
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Enemy"|| collision.gameObject.tag == "EnemyBullet")
+        if ((collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "EnemyBullet") && isGameEnd == false)
         {
             GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().GameOverScreen();
             
