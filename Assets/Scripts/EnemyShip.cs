@@ -122,6 +122,7 @@ public class EnemyShip : MonoBehaviour
                 angle = Mathf.Atan2(targetPos.y, targetPos.x) * Mathf.Rad2Deg;
                 firePoint.rotation = Quaternion.Euler(new Vector3(0, 0, angle + offset));
 
+
                 if (shootTimer > 0)
                 {
                     shootTimer -= Time.deltaTime;
@@ -169,7 +170,7 @@ public class EnemyShip : MonoBehaviour
                 shieldObject.gameObject.SetActive(true);
 
             if (randomMove == true)
-                destination = Random.Range(0.5f, 2.3f);
+                destination = Random.Range(-2.0f, 2.0f);
             if (invincible == true)
                 invincibleTimer = setInvincibleTimer;
 

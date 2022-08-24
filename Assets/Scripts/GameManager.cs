@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public GameObject pauseObjects;
     public GameObject shootArea;
+    private bool shootAreaActive = false;
     private bool isPaused = false;
     public GameObject Level;
 
@@ -47,6 +48,12 @@ public class GameManager : MonoBehaviour
             isGameStarted = true;
         }
 
+        if (isGameStarted == true && shootAreaActive == false && GameObject.FindGameObjectWithTag("PlayerHolder").GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime > 1) 
+        {
+            shootAreaActive = true;
+            shootArea.SetActive(true);
+        }
+
         if (isGameStarted == true && isGameOver == false && isTutorial == false)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -66,9 +73,10 @@ public class GameManager : MonoBehaviour
        
     }
 
+
     private void StartGame()
     {
-        shootArea.SetActive(true);
+
 
         foreach (GameObject item in inGameObjects)
         {
@@ -146,10 +154,11 @@ public class GameManager : MonoBehaviour
 
         EnemyShips = GameObject.FindGameObjectsWithTag("Enemy");
 
+        
         foreach (GameObject item in EnemyShips)
         {
-
-            item.GetComponent<EnemyShip>().enabled = false;
+            if (item.GetComponent<EnemyShip>() != null)
+                item.GetComponent<EnemyShip>().enabled = false;
         }
         //Time.timeScale = 0;
 

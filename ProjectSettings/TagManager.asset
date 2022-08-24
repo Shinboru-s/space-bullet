@@ -22,6 +22,9 @@ TagManager:
   - LevelButtonText
   - TutorialManagerTag
   - AudioManager
+  - BossBarrier
+  - BossWeapon
+  - BossHolder
   layers:
   - Default
   - TransparentFX
